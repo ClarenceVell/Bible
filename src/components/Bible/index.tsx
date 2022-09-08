@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react'
 
-const Bible = () => {
+interface BibleProps {
+    width: number
+}
+
+const Bible: React.FC<BibleProps> = ({
+    width = 100
+}) => {
     const [passages, setPassages] = useState<any[]>([])
     const [selectedPassage, setSelectedPassage] = useState<any>()
     const [chapters, setChapters] = useState<any[]>([])

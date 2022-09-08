@@ -6,7 +6,7 @@ import Bible from './components/Bible';
 const App = () => {
   return (
     <div className="App">
-      <Bible />
+      <Bible width={100} />
     </div>
   );
 }
