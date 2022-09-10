@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-// import List from '../components/List/List'
+import List from '../components/List/List'
 
 function Home() {
   const [passages, setPassages] = useState<any[]>([])

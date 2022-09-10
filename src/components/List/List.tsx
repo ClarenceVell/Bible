@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
 
-// interface ListProps {
-//   passages: any[]
-// }
+interface ListProps {
+  passages: any[]
+}
 
-function List: React.FC<ListProps> ({
-  passages
-}) {
+const List: React.FC<ListProps> = ({
+  passages = []
+}) => {
   
 
   return (
