@@ -67,5 +67,3 @@ const Bible: React.FC<BibleProps> = ({
 }
 
 export default React.memo(Bible)
-
-// gabungan book, dropdown 

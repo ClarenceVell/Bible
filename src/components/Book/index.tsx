@@ -1,3 +1,0 @@
-export {}
-
-// gabungan semua content
