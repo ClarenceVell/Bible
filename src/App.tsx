@@ -21,6 +21,8 @@ const App = () => {
   const [filteredData, setFilteredData] = useState<any[]>([])
   const [bgColor, setBgColor] = useState<any>('white')
   const [textColor, setTextColor] = useState<any>('black')
+  const [titleSize, setTitleSize] = useState<any>('23px')
+  const [textSize, setTextSize] = useState<any>('16px')
 
   
   const [paths, setPaths] = useState<string[]>()
@@ -56,8 +58,6 @@ const App = () => {
     if (paths && paths.length > 0 && passages.length > 0) {
       setSelectedPassage(paths[2])
       const data = passages.filter((d: any) => {
-        // console.log(paths)
-        // setChapter(paths[3])
         return paths[2]===d.abbreviation
       })
       setFilteredData(data)
@@ -83,7 +83,11 @@ const App = () => {
 
   return (
     <>
-      <GlobalStyle bg={bgColor} color={textColor} />
+      <GlobalStyle 
+        bg={bgColor} 
+        color={textColor} 
+        fs={textSize} 
+      />
       <Bar 
         data={filteredData} 
         chapter={chapter}
@@ -95,7 +99,11 @@ const App = () => {
         <Route path='/' element={<Home passages={passages} chapter={chapter} setChapter={setChapter}/>} />
         <Route path='/bible/:passage/:chapter' 
           element={
-            <Content data={filteredData} content={content} textColor={textColor}/>
+            <Content 
+              data={filteredData} 
+              content={content} 
+              textColor={textColor}
+            />
           } 
         />
       </Routes>

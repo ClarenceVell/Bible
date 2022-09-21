@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, { useState} from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../Logo/Logo'
 import { Nav, Side, NavRight, NavLeft, ConChapter, ConColor, ConFontSize, Font } from './styled'
@@ -30,25 +30,6 @@ const Bar: React.FC<BarProps> = ({
   const location = useLocation()
   const [isSideBar, setIsSideBar] = useState<boolean>(false)
 
-  const bgBlack = () => {
-    setBgColor('black')
-    setTextColor('white')
-  }
-
-  const bgWhite = () => {
-    setBgColor('white')
-    setTextColor('black')
-  }
-
-  const bgBlue = () => {
-    setBgColor('#bdd5d0')
-    setTextColor('black')
-  }
-
-  const bgChoco = () => {
-    setBgColor('#926446')
-    setTextColor('white')
-  }
   return (
     <>
       <Nav>
@@ -103,22 +84,34 @@ const Bar: React.FC<BarProps> = ({
         <p style={{fontSize: '20px', margin: '12px 0'}}>Tampilan</p>
         <ConColor>
           <div 
-            onClick={bgBlack}
+            onClick={() => {
+              setBgColor('black')
+              setTextColor('white')
+            }}
             style={{height: '42px', backgroundColor: 'black'}}
           >
           </div>
           <div 
-            onClick={bgWhite}
+            onClick={() => {
+              setBgColor('white')
+              setTextColor('black')
+            }}
             style={{height: '42px', backgroundColor: 'white'}}
           >
           </div>
           <div 
-            onClick={bgBlue}
+            onClick={() => {
+              setBgColor('#bdd5d0')
+              setTextColor('black')
+            }}
             style={{height: '42px', backgroundColor: '#bdd5d0'}}
           >
           </div>
           <div 
-            onClick={bgChoco}
+            onClick={() => {
+              setBgColor('#926446')
+              setTextColor('white')
+            }}
             style={{height: '42px', backgroundColor: '#926446'}}
           >
           </div>

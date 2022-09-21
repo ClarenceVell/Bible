@@ -14,7 +14,7 @@ interface BreadCrumbProps {
 const BreadCrumb: React.FC<BreadCrumbProps> = ({textColor}) => {
 
   return (
-    <div style={{display: 'flex', alignItems: 'center', gap: '8px'}} >
+    <div style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize:'16px'}} >
         {to?.map((x, idx) => (
             <Link to={x.url} key={idx} style={{color: textColor, display: 'flex', textDecoration: 'none', alignItems: 'center', gap: '8px'}}>
                 <p>{x.name}</p>

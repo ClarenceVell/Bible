@@ -37,7 +37,7 @@ const Content : React.FC<ContentProps> = ({data, content, textColor}) => {
         <ol>
           {content?.verses?.map((x:any, idx:number) => (
             <div style={{padding: '0 20px'}} key={idx}>
-              <li style={{fontSize: '18px', marginBottom: '6px'}}>{x.content}</li>
+              <li style={{fontSize: '20px', marginBottom: '6px'}}>{x.content}</li>
             </div>
           ))}
         </ol>
