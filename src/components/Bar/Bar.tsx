@@ -1,7 +1,7 @@
 import React, { useState} from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../Logo/Logo'
-import { Nav, Side, NavRight, NavLeft, ConChapter, ConColor, ConFontSize, Font } from './styled'
+import { Nav, Side, NavRight, NavLeft, ConChapter, ConColor, ConFontSize, Font, ConSearch, InputSearch } from './styled'
 import { FaBars } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { ImSearch } from 'react-icons/im';
@@ -14,21 +14,41 @@ interface BarProps {
   chapter: any,
   language: any,
   setLanguage: any,
-  bgColor: any,
   setBgColor: any,
-  textColor: any,
   setTextColor: any,
+  setTitleSize: any,
+  setTextSize: any,
+  handleSearch: any
 }
 
 const Bar: React.FC<BarProps> = ({
   data,
   chapter, 
   language, setLanguage,
-  bgColor, setBgColor,
-  textColor, setTextColor
+  setBgColor,
+  setTextColor,
+  setTitleSize,
+  setTextSize,
+  handleSearch
 }) => {
   const location = useLocation()
   const [isSideBar, setIsSideBar] = useState<boolean>(false)
+
+  // const [result, setresult] = useState<any>()
+
+  // const handleSearch = (e:any) => {
+  //   console.log('val')
+  //   let tes 
+  //   if(e.target.value){
+  //     // console.log(content.verses)
+  //     // console.log(e.target.value)
+  //     tes = content?.verses?.filter(
+  //       (item:any) => item.content.toLowerCase().includes(e.target.value.toLowerCase())
+  //     )
+  //   }
+  //   setresult(tes)
+  // }
+  // console.log(result, 'result')
 
   return (
     <>
@@ -70,16 +90,21 @@ const Bar: React.FC<BarProps> = ({
               <option style={{background:'transparent',border:'none'}} value="net">English</option>
               <option style={{border:'none'}} value="tb">Indonesia</option>
             </select>
-            <ImSearch
-              style={{width: '22px', height:'22px'}} 
-            />
+
+            <ConSearch>
+              <InputSearch type="text" placeholder='Search' onChange={handleSearch}/>
+              <ImSearch
+                style={{width: '22px', height:'22px'}} 
+              />
+            </ConSearch>
+
           </NavLeft>
       </Nav>
 
       <Side isSidebar={isSideBar}>
         <IoMdClose
           onClick={() => setIsSideBar(!isSideBar)}
-          style={{width: '25px', height:'25px', cursor:'pointer'}} 
+          style={{width: '25px', height:'25px', cursor:'pointer', fontSize: '16px'}} 
          />
         <p style={{fontSize: '20px', margin: '12px 0'}}>Tampilan</p>
         <ConColor>
@@ -118,9 +143,18 @@ const Bar: React.FC<BarProps> = ({
         </ConColor>
 
         <ConFontSize>
-          <Font FS='16px'>A</Font>
-          <Font FS='20px'>A</Font>
-          <Font FS='25px'>A</Font>
+          <Font onClick={() => {
+            setTitleSize('22px')
+            setTextSize('16px')
+          }} FS='16px'>A</Font>
+          <Font onClick={() => {
+            setTitleSize('24px')
+            setTextSize('20px')
+          }} FS='20px'>A</Font>
+          <Font onClick={() => {
+            setTitleSize('30px')
+            setTextSize('25px')
+          }} FS='25px'>A</Font>
         </ConFontSize>
         
       </Side>

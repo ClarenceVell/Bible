@@ -73,6 +73,7 @@ export const ConChapter = styled.div`
 export const ConColor = styled.div`
     display: grid;
     grid-template-columns: auto auto ;
+    cursor: pointer;
 `
 
 export const ConFontSize = styled.div`
@@ -89,5 +90,27 @@ export const Font:any = styled.div<FontProps>`
     padding: 8px 15px;
     border-radius: 50%;
     font-weight: bold;
+    cursor: pointer;
     font-size: ${( {FS} ) => FS}
+`
+
+export const InputSearch = styled.input`
+    width: 0;
+    transition: 0.8s;
+    outline: none;
+    border: none;
+    background: transparent;
+`
+
+export const ConSearch = styled.div`
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    &:hover ${InputSearch}{
+        width: 200px;
+    }
 `

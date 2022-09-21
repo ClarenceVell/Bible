@@ -24,6 +24,7 @@ const App = () => {
   const [titleSize, setTitleSize] = useState<any>('23px')
   const [textSize, setTextSize] = useState<any>('16px')
 
+  const [resultSearch, setResultSearch] = useState<any>(content?.verse)
   
   const [paths, setPaths] = useState<string[]>()
 
@@ -79,7 +80,29 @@ const App = () => {
     }
   }, [chapter, filteredData, language])
 
+  // useEffect(() => {
+  //   setResultSearch(content?.verse)
+  // }, [content])
+
+  const handleSearch = (e:any) => {
+    console.log('val')
+    let search 
+    if(e.target.value){
+      // console.log(content.verses)
+      console.log(e.target.value)
+      search = content?.verses?.filter(
+        (item:any) => item.content.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+      setResultSearch(search)
+    } else {
+      console.log('haiiiiiiiiiiiii', content?.verse)
+      setResultSearch(content?.verse)
+    }
+    // e.target.value = ''
+  }
+  console.log(resultSearch, 'result')
   console.log(language, 'language')
+  console.log(filteredData, 'filteredData')
 
   return (
     <>
@@ -91,9 +114,13 @@ const App = () => {
       <Bar 
         data={filteredData} 
         chapter={chapter}
-        bgColor={bgColor} setBgColor={setBgColor}
-        textColor={textColor} setTextColor={setTextColor}
-        setLanguage={setLanguage} language={language}
+        setBgColor={setBgColor}
+        setTextColor={setTextColor}
+        setLanguage={setLanguage} 
+        language={language}
+        setTitleSize={setTitleSize}
+        setTextSize={setTextSize}
+        handleSearch={handleSearch}
       />
       <Routes>
         <Route path='/' element={<Home passages={passages} chapter={chapter} setChapter={setChapter}/>} />
@@ -102,7 +129,10 @@ const App = () => {
             <Content 
               data={filteredData} 
               content={content} 
+              resultSearch={resultSearch}
               textColor={textColor}
+              titleSize={titleSize}
+              textSize={textSize}
             />
           } 
         />
