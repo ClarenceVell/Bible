@@ -18,17 +18,17 @@ const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, 
   // // console.log(content.verses)
   useEffect(() => {
     console.log('hkjkjh')
-    console.log(content?.verses?.length > 0 )
-    if(content && content?.verses?.length > 0 ){
+    if(resultSearch?.length > 0 ){
       console.log('hahahaaa')
-      if(content?.verses[0]?.type == "title"){
+      if(resultSearch[0]?.type === "title"){
         console.log('JALAN')
-        const removed = content.verses.shift()
+        const removed = resultSearch.shift()
         setVerse(removed)
+      } else {
+        setVerse('')
       }
     }
-    console.log(verse, 'verses')
-  }, [content])
+  }, [resultSearch])
 
 
 

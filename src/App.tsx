@@ -27,6 +27,7 @@ const App = () => {
   const [resultSearch, setResultSearch] = useState<any>(content?.verse)
   
   const [paths, setPaths] = useState<string[]>()
+  const [keyword, setKeyword] = useState<string>('')
 
   
   useEffect(() => {
@@ -65,6 +66,21 @@ const App = () => {
     }
   }, [paths, passages])
 
+  const handleSearch = (e:any) => {
+    let search 
+    if(e.target.value){
+      console.log(e.target.value)
+      setKeyword(e.target.value)
+      search = content?.verses?.filter(
+        (item:any) => item.content.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+      setResultSearch(search)
+    } else {
+      setResultSearch(content?.verses)
+    }
+    // e.target.value = ''
+  }
+
   useEffect(() => {
     if (filteredData && filteredData.length > 0) {
       fetch(
@@ -73,33 +89,17 @@ const App = () => {
       .then(Response => Response.json())
       .then(data => {
         setContent(data)
+        const search = data?.verses?.filter(
+          (item:any) => item.content.toLowerCase().includes(keyword.toLowerCase())
+        )
+        setResultSearch(search)
       })
       .catch(error => {
         console.log(error)
       })
     }
-  }, [chapter, filteredData, language])
+  }, [chapter, filteredData, keyword, language])
 
-  // useEffect(() => {
-  //   setResultSearch(content?.verse)
-  // }, [content])
-
-  const handleSearch = (e:any) => {
-    console.log('val')
-    let search 
-    if(e.target.value){
-      // console.log(content.verses)
-      console.log(e.target.value)
-      search = content?.verses?.filter(
-        (item:any) => item.content.toLowerCase().includes(e.target.value.toLowerCase())
-      )
-      setResultSearch(search)
-    } else {
-      console.log('haiiiiiiiiiiiii', content?.verse)
-      setResultSearch(content?.verse)
-    }
-    // e.target.value = ''
-  }
   console.log(resultSearch, 'result')
   console.log(language, 'language')
   console.log(filteredData, 'filteredData')
@@ -114,6 +114,7 @@ const App = () => {
       <Bar 
         data={filteredData} 
         chapter={chapter}
+        // passages={passages}
         setBgColor={setBgColor}
         setTextColor={setTextColor}
         setLanguage={setLanguage} 

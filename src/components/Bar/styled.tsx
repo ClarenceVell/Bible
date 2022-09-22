@@ -79,15 +79,16 @@ export const ConColor = styled.div`
 export const ConFontSize = styled.div`
     display: flex;
     justify-content: space-around;
-    margin-top: 30px;
+    margin: 30px 0;
 `
 type FontProps = {
-    FS: any
+    FS: any,
+    padding: string
 }
 
 export const Font:any = styled.div<FontProps>`
     border: 2px solid black;
-    padding: 8px 15px;
+    padding: ${( {padding} ) => padding};
     border-radius: 50%;
     font-weight: bold;
     cursor: pointer;

@@ -8,6 +8,7 @@ import { ImSearch } from 'react-icons/im';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
 import { useLocation } from 'react-router-dom'
+import Dropdown from '../Dropdown/Dropdown';
 
 interface BarProps {
   data: any[],
@@ -34,21 +35,6 @@ const Bar: React.FC<BarProps> = ({
   const location = useLocation()
   const [isSideBar, setIsSideBar] = useState<boolean>(false)
 
-  // const [result, setresult] = useState<any>()
-
-  // const handleSearch = (e:any) => {
-  //   console.log('val')
-  //   let tes 
-  //   if(e.target.value){
-  //     // console.log(content.verses)
-  //     // console.log(e.target.value)
-  //     tes = content?.verses?.filter(
-  //       (item:any) => item.content.toLowerCase().includes(e.target.value.toLowerCase())
-  //     )
-  //   }
-  //   setresult(tes)
-  // }
-  // console.log(result, 'result')
 
   return (
     <>
@@ -72,7 +58,7 @@ const Bar: React.FC<BarProps> = ({
                       <AiOutlineLeft  />
                     </Link>
                   )}
-                  <p>{data[0]?.book_name ? data[0]?.book_name && parseInt(chapter) : '-'  } </p>
+                  <p>{data[0]?.book_name ? `${data[0]?.book_name} ${parseInt(chapter)}` : '-'}</p>
                   <Link style={parseInt(chapter) === data[0]?.total_chapter ? {color: 'black', pointerEvents: 'none'} : { color: 'black'}} to={`/bible/${data[0]?.abbreviation}/${parseInt(chapter)+1}`}  >
                     <AiOutlineRight />
                   </Link>
@@ -94,7 +80,7 @@ const Bar: React.FC<BarProps> = ({
             <ConSearch>
               <InputSearch type="text" placeholder='Search' onChange={handleSearch}/>
               <ImSearch
-                style={{width: '22px', height:'22px'}} 
+                style={{width: '20px', height:'20px'}} 
               />
             </ConSearch>
 
@@ -146,16 +132,18 @@ const Bar: React.FC<BarProps> = ({
           <Font onClick={() => {
             setTitleSize('22px')
             setTextSize('16px')
-          }} FS='16px'>A</Font>
+          }} FS='16px' padding='12px 13px'>A</Font>
           <Font onClick={() => {
             setTitleSize('24px')
             setTextSize('20px')
-          }} FS='20px'>A</Font>
+          }} FS='20px' padding='10px 14px'>A</Font>
           <Font onClick={() => {
             setTitleSize('30px')
             setTextSize('25px')
-          }} FS='25px'>A</Font>
+          }} FS='25px' padding='8px 15px'>A</Font>
         </ConFontSize>
+
+        <Dropdown />
         
       </Side>
     </>
