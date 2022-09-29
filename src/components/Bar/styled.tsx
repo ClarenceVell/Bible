@@ -55,6 +55,7 @@ export const Side:any = styled.div<SideProps>`
     color: black;
     transition: 350ms;
     position: fixed;
+    overflow-x: auto;
     top: 0;
     left: ${( { isSidebar } ) => isSidebar ? '0' : '-100%'};
     padding: 15px 15px;
@@ -68,12 +69,19 @@ export const ConChapter = styled.div`
     align-items: center;
     font-size: 22px;
     gap: 20px;
+    min-width: 180px;
 `
 
 export const ConColor = styled.div`
-    display: grid;
-    grid-template-columns: auto auto ;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     cursor: pointer;
+
+    .font{
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
 `
 
 export const ConFontSize = styled.div`
