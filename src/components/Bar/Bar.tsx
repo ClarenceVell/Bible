@@ -6,6 +6,7 @@ import { FaBars } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { ImSearch } from 'react-icons/im';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { CirclePicker, SketchPicker, SliderPicker } from 'react-color';
 
 import { useLocation } from 'react-router-dom'
 import Dropdown from '../Dropdown/Dropdown';
@@ -15,26 +16,54 @@ interface BarProps {
   chapter: any,
   language: any,
   setLanguage: any,
+  bgColor: any,
   setBgColor: any,
+  textColor:any,
   setTextColor: any,
   setTitleSize: any,
   setTextSize: any,
-  handleSearch: any
+  handleSearch: any,
+  passages: any,
+  selectedPassage: any,
+  setSelectedPassage: any,
+  selectedChapter: any,
+  setSelectedChapter: any,
+  setTotalChapter:any,
+  totalChapter: any,
 }
 
 const Bar: React.FC<BarProps> = ({
   data,
   chapter, 
   language, setLanguage,
+  bgColor,
   setBgColor,
+  textColor,
   setTextColor,
   setTitleSize,
   setTextSize,
-  handleSearch
+  handleSearch,
+  passages,
+  selectedPassage,
+  setSelectedPassage,
+  selectedChapter,
+  setSelectedChapter,
+  totalChapter,
+  setTotalChapter
 }) => {
   const location = useLocation()
   const [isSideBar, setIsSideBar] = useState<boolean>(false)
 
+  console.log('select passages', selectedPassage)
+  console.log('chapter', selectedChapter)
+
+  const handleChangeBg = (color:any, event:any) => {
+    setBgColor(color.hex);
+  };
+
+  const handleChangeFont = (color:any, event:any) => {
+    setTextColor(color.hex);
+  };
 
   return (
     <>
@@ -58,7 +87,7 @@ const Bar: React.FC<BarProps> = ({
                       <AiOutlineLeft  />
                     </Link>
                   )}
-                  <p>{data[0]?.book_name ? `${data[0]?.book_name} ${parseInt(chapter)}` : '-'}</p>
+                  <p>{data[0]?.book_name ? `${data[0]?.book_name} ${parseInt(chapter)}` : `${selectedPassage}: ${parseInt(chapter)}`}</p>
                   <Link style={parseInt(chapter) === data[0]?.total_chapter ? {color: 'black', pointerEvents: 'none'} : { color: 'black'}} to={`/bible/${data[0]?.abbreviation}/${parseInt(chapter)+1}`}  >
                     <AiOutlineRight />
                   </Link>
@@ -71,10 +100,9 @@ const Bar: React.FC<BarProps> = ({
         </NavRight>
 
           <NavLeft>
-            {/* <label htmlFor="language">{language}</label> */}
-            <select onChange={(e) => {setLanguage(e.target.value)}} style={{backgroundColor: 'transparent', padding:'5px 7px', border: 'none'}} name="language" id="">
-              <option style={{background:'transparent',border:'none'}} value="net">English</option>
+            <select onChange={(e) => {setLanguage(e.target.value)}} value={language} style={{backgroundColor: 'transparent', padding:'5px 7px', border: 'none'}} name="language" id="">
               <option style={{border:'none'}} value="tb">Indonesia</option>
+              <option style={{background:'transparent',border:'none'}} value="net">English</option>
             </select>
 
             <ConSearch>
@@ -92,8 +120,8 @@ const Bar: React.FC<BarProps> = ({
           onClick={() => setIsSideBar(!isSideBar)}
           style={{width: '25px', height:'25px', cursor:'pointer', fontSize: '16px'}} 
          />
-        <p style={{fontSize: '20px', margin: '12px 0'}}>Tampilan</p>
-        <ConColor>
+        <p style={{fontSize: '25px', margin: '12px 0'}}>Tampilan</p>
+        {/* <ConColor>
           <div 
             onClick={() => {
               setBgColor('black')
@@ -126,6 +154,23 @@ const Bar: React.FC<BarProps> = ({
             style={{height: '42px', backgroundColor: '#926446'}}
           >
           </div>
+        </ConColor> */}
+
+        <ConColor>
+          <div>
+            <p className='font'>Background Color:</p>
+            <SketchPicker 
+              color={ bgColor }
+              disableAlpha={true} 
+              presetColors={[]} 
+              onChange={handleChangeBg}
+              onSwatchHover={handleChangeBg}
+            />
+          </div>
+          <div>
+            <p className='font'>Font Color:</p>
+            <SliderPicker color={textColor} onChange={handleChangeFont} />
+          </div>
         </ConColor>
 
         <ConFontSize>
@@ -143,7 +188,17 @@ const Bar: React.FC<BarProps> = ({
           }} FS='25px' padding='8px 15px'>A</Font>
         </ConFontSize>
 
-        <Dropdown />
+        <Dropdown
+          data={data}
+          chapter={chapter}
+          passages={passages}
+          selectedPassage={selectedPassage} 
+          setSelectedPassage={setSelectedPassage}
+          selectedChapter={selectedChapter}
+          setSelectedChapter={setSelectedChapter}
+          setTotalChapter={setTotalChapter}
+          totalChapter={totalChapter}
+         />
         
       </Side>
     </>
