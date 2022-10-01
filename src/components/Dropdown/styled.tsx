@@ -19,10 +19,18 @@ export const respondTo = Object.keys(breakpoints).reduce(
     {}
 );
 
-export const ConDropdown = styled.div`
+interface DropProperties {
+    isMobile: boolean
+}
+export const ConDropdown = styled.div<DropProperties>`
     display: flex;
     gap: 15px;
     font-size: 16px;
+    flex-direction: ${({ isMobile }) => isMobile ? 'column': 'row'};
+    
+    &>*:not(:nth-child(2)){
+        // color: red;
+    }
 `
 
 export const Dropdownn = styled.div`
@@ -34,8 +42,12 @@ export const Dropdownn = styled.div`
 `
 
 export const ConOption = styled.div`
+    display: block;
+    // top: 30px;
+    // left: -30px;
     height: 150px;
     overflow: auto;
+    z-index: 10;
 `
 
 type OptionUnlistProps = {
@@ -49,7 +61,11 @@ export const OptionUnlist:any = styled.ul<OptionUnlistProps>`
     flex-wrap: wrap;
     overflow: auto; 
     margin: 5px;
-    height: ${(props) => props.height} ;
+    height: auto;
+
+    ${respondTo.md`
+        height: ${(props:any) => props.height};
+    `}
 `
 
 export const OptionList= styled.li`

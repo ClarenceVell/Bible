@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { AiFillCaretDown } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 
 import { ConDropdown, Dropdownn, ConOption, OptionUnlist, OptionList, Icon } from './styled'
 
@@ -10,11 +9,8 @@ interface DropdownProps {
   selectedPassage: any,
   setSelectedPassage: any,
   selectedChapter: any,
-  setSelectedChapter: any,
-  setTotalChapter:any,
   totalChapter: any,
-  data: any,
-  chapter: any,
+  width: number,
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -22,24 +18,14 @@ const Dropdown: React.FC<DropdownProps> = ({
   selectedPassage,
   setSelectedPassage,
   selectedChapter,
-  setSelectedChapter,
   totalChapter,
-  setTotalChapter,
-  data, chapter
+  width, 
 }) => {
   const navigate = useNavigate()
   const [isOpenPass, setIsOpenPass] = useState<boolean>(false)
   const [isOpenChap, setIsOpenChap] = useState<boolean>(false)
   const [chapters, setChapters] = useState<any[]>()
 
-  // useEffect(() => {
-  //   localStorage.setItem('chapters', chapters)
-  // }, [chapters])
-
-  // useEffect(() => {
-  //   setSelectedPassage(data[0]?.book_name )
-  //   setSelectedChapter(parseInt(chapter) )
-  // }, [chapter, data, setSelectedChapter, setSelectedPassage])
 
   useEffect(() => {
     let arrChap = []
@@ -52,47 +38,62 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div>
-      <ConDropdown>
+      <ConDropdown isMobile={width <= 480}>
+        <div style={{width: '100%', background: 'reds'}}>
+
           <Dropdownn>
               <p>{selectedPassage? selectedPassage : passages[0]?.book_name }</p>
               <AiFillCaretDown 
-                onClick={() => setIsOpenPass(!isOpenPass)}
+                onClick={() => {
+                  setIsOpenPass(!isOpenPass)
+                  setIsOpenChap(false)
+                }}
                 style={{fontSize: '14px', cursor: 'pointer'}} 
               />
           </Dropdownn>
-
+          
+          {/* <div> */}
+            {isOpenPass && (
+              <ConOption>
+                  <OptionUnlist height='1100px'>
+                    {passages.map((pass:any, idx:number) =>(
+                      <div style={{display: 'flex'}} key={idx}>
+                        <Icon>
+                          {selectedPassage === pass? '✔' : ''}
+                        </Icon>
+                        <OptionList
+                          onClick={(e:any) => {
+                            setSelectedPassage(e.target.textContent)
+                            setIsOpenPass(false)
+                            setIsOpenChap(true)
+                          }}
+                        >
+                          {pass?.book_name}
+                        </OptionList>
+                      </div>
+                    ))}
+                  </OptionUnlist>
+              </ConOption>
+            )}
+          {/* </div> */}
+        </div>
+        
+        <div>
+          
           <Dropdownn>
               <p>{selectedChapter ? selectedChapter : '-'}</p>
               <AiFillCaretDown 
-                onClick={() => setIsOpenChap(!isOpenChap)}
+                onClick={() =>{
+                  setIsOpenChap(!isOpenChap)
+                  setIsOpenPass(false)
+                }}
                 style={{fontSize: '14px', cursor: 'pointer'}} 
               />
           </Dropdownn>
+        </div>
       </ConDropdown>
 
-      {isOpenPass && (
-        <ConOption>
-            <OptionUnlist height='1100px'>
-              {passages.map((pass:any, idx:number) =>(
-                <div style={{display: 'flex'}} key={idx}>
-                  <Icon>
-                    {selectedPassage === pass? '✔' : ''}
-                  </Icon>
-                  <OptionList
-                    onClick={(e:any) => {
-                      setSelectedPassage(e.target.textContent)
-                      setIsOpenPass(false)
-                      setIsOpenChap(true)
-                    }}
-                  >
-                    {pass?.book_name}
-                  </OptionList>
-                </div>
-              ))}
-            </OptionUnlist>
-        </ConOption>
-      )}
-
+    
       {isOpenChap && (
         <ConOption>
             <OptionUnlist height='400px'>
@@ -102,17 +103,15 @@ const Dropdown: React.FC<DropdownProps> = ({
                     {selectedChapter === chap? '✔' : ''}
                   </Icon>
 
-                  {/* <Link to={`/bible/${localStorage.getItem('passage')}/${selectedChapter}`}> */}
                     <OptionList
                       onClick={(e:any) => {
                         setIsOpenChap(false)
-                        // navigate(`/`)
-                        navigate(`/bible/${selectedPassage}/${chap}`)
+                        navigate(`/bible/${selectedPassage.replace(/\s/g, '')}/${chap}`)
                       }}
                     >
                       {chap}
                     </OptionList>
-                  {/* </Link> */}
+
                 </div>
               ))}
             </OptionUnlist>

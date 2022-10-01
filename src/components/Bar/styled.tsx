@@ -67,9 +67,15 @@ export const Side:any = styled.div<SideProps>`
 export const ConChapter = styled.div`
     display: flex;
     align-items: center;
-    font-size: 22px;
-    gap: 20px;
-    min-width: 180px;
+    font-size: 18px;
+    gap: 5px;
+    min-width: 200px;
+
+    ${respondTo.md`
+        font-size: 20px;
+        gap: 18px;
+        min-width: 220px;
+    `}
 `
 
 export const ConColor = styled.div`

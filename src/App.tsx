@@ -1,13 +1,18 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home';
 import Content from './pages/Content';
 import Bar from './components/Bar/Bar';
 import { GlobalStyle } from './globalStyled';
+import { useTranslation } from 'react-i18next';
 
 const App = () => {
 
   const location = useLocation()
+  const { t, i18n} = useTranslation()
+  const changeLanguage = useCallback((lang: string) => {
+    i18n.changeLanguage(lang);
+  }, [i18n])
   const [passages, setPassages] = useState<any[]>([])
   const [selectedPassage, setSelectedPassage] = useState<any>()
   const [selectedChapter, setSelectedChapter] = useState<any>()
@@ -15,7 +20,6 @@ const App = () => {
   const [chapter, setChapter] = useState<any>(1)
   const [content, setContent] = useState<any>()
   const [language, setLanguage] = useState<any>(localStorage.getItem('lang') || 'tb')
-  const [selectedAbre, setSelectedAbre] = useState<string>('')
   const [filteredData, setFilteredData] = useState<any[]>([])
   const [bgColor, setBgColor] = useState<any>('white')
   const [textColor, setTextColor] = useState<any>('black')
@@ -26,12 +30,42 @@ const App = () => {
   
   const [paths, setPaths] = useState<string[]>()
   const [keyword, setKeyword] = useState<string>('')
+  const [dimension, setDimension] = useState<{
+    width: number,
+    height: number,
+  }>({
+    width: window.innerWidth,
+    height: window.innerHeight
+  })
+
+  const resize = () => {
+    setDimension({
+      width: window.innerWidth,
+      height: window.innerHeight
+    })
+  }
+
+  useEffect(() => {
+    if (language && language !== '') {
+      changeLanguage(language === 'tb' ? 'id' : 'en')
+    }
+  }, [changeLanguage, language])
+
+  // useEffect(() => {
+  //   console.log({ dimension })
+  // }, [dimension])
+
+  useEffect(() => {
+    window.addEventListener('resize', resize)
+
+    return () => {
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
 
   useEffect(() => {
     
     localStorage.setItem('lang', language)
-    // localStorage.setItem('passage', selectedPassage)
-    // localStorage.setItem('totalChap', totalChapter)
 
   }, [language, selectedPassage, totalChapter])
 
@@ -48,8 +82,6 @@ const App = () => {
     )
       .then(response => response.json())
       .then(data => {
-        // console.log({ data })
-        console.log(data, 'DaATAAAAAAAAAAAAAAA')
           setPassages(data.passage_list)
       })
       .catch(error => {
@@ -60,22 +92,19 @@ const App = () => {
 
   useEffect(() => {
     if (filteredData && filteredData.length > 0) {
-      setSelectedAbre(filteredData[0].abbreviation)
-      setSelectedPassage(filteredData[0].abbreviation)
+      setSelectedPassage(filteredData[0].abbreviation.replace(/\s/g, ''))
     }
   }, [filteredData])
 
   useEffect(() => {
-    // console.log('test')
     if (paths && paths.length > 0 && passages.length > 0) {
       console.log({ passages })
       console.log({ paths })
       const data = passages.filter((d: any) => {
-        return paths[2]===d.abbreviation
+        return paths[2]===d.abbreviation.replace(/\s/g, '')
       })
       setFilteredData(data)
       console.log({data})
-      // setSelectedPassage(data.book_name)
       setTotalChapter(data[0]?.total_chapter || 0)
     }
   }, [paths, passages])
@@ -91,19 +120,18 @@ const App = () => {
     } else {
       setResultSearch(content?.verses)
     }
-    // e.target.value = ''
   }
 
   useEffect(() => {
     const lang = localStorage.getItem('lang')
     if (filteredData && filteredData.length > 0) {
+      console.log('TESSSSSSSS',filteredData[0].abbreviation.replace(/\s/g, ''))
       fetch(
-        `${process.env.REACT_APP_BIBLE_URL_V3 + `${filteredData[0].abbreviation}/${chapter}?ver=${lang}`}`
+        `${process.env.REACT_APP_BIBLE_URL_V3 + `${filteredData[0].abbreviation.replace(/\s/g, '')}/${chapter}?ver=${lang}`}`
       )
       .then(Response => Response.json())
       .then(data => {
         setContent(data)
-        // console.log(data, 'DaATAAAAAAAAAAAAAAA')
         const search = data?.verses?.filter(
           (item:any) => item.content.toLowerCase().includes(keyword.toLowerCase())
         )
@@ -114,10 +142,6 @@ const App = () => {
       })
     }
   }, [chapter, filteredData, keyword, language])
-
-  console.log('passage app', selectedPassage)
-  console.log('chap app', selectedChapter)
-
 
   return (
     <>
@@ -142,12 +166,19 @@ const App = () => {
         selectedPassage={selectedPassage} 
         setSelectedPassage={setSelectedPassage}
         selectedChapter={selectedChapter}
-        setSelectedChapter={setSelectedChapter}
-        setTotalChapter={setTotalChapter}
         totalChapter={totalChapter}
+        width={dimension?.width || 0} 
       />
       <Routes>
-        <Route path='/' element={<Home passages={passages} chapter={chapter} setChapter={setChapter}/>} />
+        <Route path='/' 
+        element={
+          <Home 
+            passages={passages} 
+            chapter={chapter} 
+            setChapter={setChapter}
+          />
+        } 
+        />
         <Route path='/bible/:passage/:chapter' 
           element={
             <Content 
