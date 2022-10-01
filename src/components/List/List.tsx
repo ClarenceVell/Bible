@@ -17,7 +17,7 @@ const List: React.FC<ListProps> = ({
   const handleClick = (data:any) => {
     setChapter(1)
     if(to.length === 1){
-      to.push({ name: 'Content', url: `/bible/${data.abbreviation}/${chapter}`})
+      to.push({ name: 'Content', url: `/bible/${data.abbreviation.replace(/\s/g, '')}/${chapter}`})
     }
   }
   
@@ -28,7 +28,7 @@ const List: React.FC<ListProps> = ({
     <Container>
       {passages.map((pass:any, idx:number) => (
         <ConList 
-          to={`/bible/${pass.abbreviation}/1`} 
+          to={`/bible/${pass.abbreviation.replace(/\s/g, '')}/1`} 
           key={idx} 
           passages={passages[0].abbreviation === 'Kej' ? 'PL' : 'PB'}
           onClick={() => handleClick(pass)}

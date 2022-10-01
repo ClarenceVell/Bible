@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import styled from 'styled-components';
 import BreadCrumb from '../components/BreadCrumb/BreadCrumb'
+import Loader from '../components/Loader/Loader'
+
+export const Load = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`
 
 interface ContentProps {
     data: any[]
@@ -17,11 +25,8 @@ const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, 
   console.log('CONTENT', content)
   // // console.log(content.verses)
   useEffect(() => {
-    console.log('hkjkjh')
     if(resultSearch?.length > 0 ){
-      console.log('hahahaaa')
       if(resultSearch[0]?.type === "title"){
-        console.log('JALAN')
         const removed = resultSearch.shift()
         setVerse(removed)
       } else {
@@ -30,13 +35,10 @@ const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, 
     }
   }, [resultSearch])
 
-
-
-  console.log(verse?.content, 'verses')
-
+  if(!resultSearch) return <Load> <Loader /> </Load> 
   
   return (
-    <div style={{padding: '80px 20px 10px 20px'}}>
+    <div style={{padding: '80px 20px 10px 30px'}}>
         <BreadCrumb textColor={textColor} />
         <p style={{fontSize: titleSize, fontWeight: 'bold', textAlign: 'center', margin: '10px 0'}}>{verse?.content}</p>
         <ol>
