@@ -29,7 +29,6 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   useEffect(() => {
     let arrChap = []
-    console.log({ totalChapter })
     for(let i = 1; i <= totalChapter; i++){
       arrChap.push(i)
     }
@@ -68,7 +67,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                             setIsOpenChap(true)
                           }}
                         >
-                          {pass?.book_name}
+                          {pass?.abbreviation}
                         </OptionList>
                       </div>
                     ))}

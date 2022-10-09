@@ -16,8 +16,6 @@ const Home: React.FC<HomeProps> = ({
 
   const PL = passages.slice(0, 39)
   const PB = passages.slice(39, 66)
-  console.log('pl', PL)
-  console.log('pb', PB)
 
   return (
     <div style={{padding: '80px 20px 10px 20px'}}>

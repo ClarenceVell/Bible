@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../Logo/Logo'
 import { Nav, Side, NavRight, NavLeft, ConChapter, ConColor, ConFontSize, Font, ConSearch, InputSearch } from './styled'
@@ -53,14 +53,21 @@ const Bar: React.FC<BarProps> = ({
   const { t } = useTranslation()
   const location = useLocation()
   const [isSideBar, setIsSideBar] = useState<boolean>(false)
+  const [insideData, setInsideData] = useState<any>()
 
-  const handleChangeBg = (color:any, event:any) => {
+  const handleChangeBg = (color:any) => {
     setBgColor(color.hex);
   };
 
-  const handleChangeFont = (color:any, event:any) => {
+  const handleChangeFont = (color:any) => {
     setTextColor(color.hex);
   };
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setInsideData(data[0])
+    }
+  }, [data])
 
   return (
     <>
@@ -80,12 +87,12 @@ const Bar: React.FC<BarProps> = ({
                   {parseInt(chapter) === 1 ? (
                     <AiOutlineLeft style={{color: 'black'}}  />
                   ): (
-                    <Link style={{ color: 'black'}} to={`/bible/${data[0]?.abbreviation.replace(/\s/g, '')}/${parseInt(chapter)-1}`} >
+                    <Link style={{ color: 'black'}} to={`/bible/${insideData?.abbreviation.replace(/\s/g, '')}/${parseInt(chapter)-1}`} >
                       <AiOutlineLeft  />
                     </Link>
                   )}
-                  <p>{data[0]?.book_name ? `${data[0]?.book_name} ${parseInt(chapter)}` : `${selectedPassage}: ${parseInt(chapter)}`}</p>
-                  <Link style={parseInt(chapter) === data[0]?.total_chapter ? {color: 'black', pointerEvents: 'none'} : { color: 'black'}} to={`/bible/${data[0]?.abbreviation.replace(/\s/g, '')}/${parseInt(chapter)+1}`}  >
+                  <p>{insideData?.book_name ? `${t(insideData?.book_name)} ${parseInt(chapter)}` : `${selectedPassage}: ${parseInt(chapter)}`}</p>
+                  <Link style={parseInt(chapter) === insideData?.total_chapter ? {color: 'black', pointerEvents: 'none'} : { color: 'black'}} to={`/bible/${data[0]?.abbreviation.replace(/\s/g, '')}/${parseInt(chapter)+1}`}  >
                     <AiOutlineRight />
                   </Link>
                 </ConChapter>
@@ -102,12 +109,18 @@ const Bar: React.FC<BarProps> = ({
               <option style={{background:'transparent',border:'none'}} value="net">English</option>
             </select>
 
-            <ConSearch>
-              <InputSearch type="text" placeholder='Search' onChange={handleSearch}/>
-              <ImSearch
-                style={{width: '20px', height:'20px'}} 
-              />
-            </ConSearch>
+            {
+              !location.pathname.includes('bible') || width <= 480? (
+                <></>) : (
+                <ConSearch>
+                  <InputSearch type="text" placeholder='Search' onChange={handleSearch}/>
+                  <ImSearch
+                    style={{width: '20px', height:'20px'}} 
+                  />
+                </ConSearch>
+                )
+            }
+
 
           </NavLeft>
       </Nav>

@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import {ConList, Container} from './styled'
 import Loader from '../Loader/Loader'
 import { to } from '../BreadCrumb/Data'
+import { useTranslation } from 'react-i18next'
 
 interface ListProps {
   passages: any[],
@@ -13,6 +14,7 @@ const List: React.FC<ListProps> = ({
   passages = [],
   chapter, setChapter
 }) => {
+  const { t } = useTranslation()
   
   const handleClick = (data:any) => {
     setChapter(1)
@@ -21,7 +23,6 @@ const List: React.FC<ListProps> = ({
     }
   }
   
-  console.log(to)
   if (!passages?.length) return <Loader/>;
 
   return (
@@ -33,7 +34,7 @@ const List: React.FC<ListProps> = ({
           passages={passages[0].abbreviation === 'Kej' ? 'PL' : 'PB'}
           onClick={() => handleClick(pass)}
         >
-          <p>{pass.book_name}</p>
+          <p>{t(pass.book_name) || pass.book_name}</p>
         </ConList>
       ))}
     </Container>

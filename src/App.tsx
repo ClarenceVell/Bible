@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 const App = () => {
 
   const location = useLocation()
-  const { t, i18n} = useTranslation()
+  const { i18n} = useTranslation()
   const changeLanguage = useCallback((lang: string) => {
     i18n.changeLanguage(lang);
   }, [i18n])
@@ -21,8 +21,8 @@ const App = () => {
   const [content, setContent] = useState<any>()
   const [language, setLanguage] = useState<any>(localStorage.getItem('lang') || 'tb')
   const [filteredData, setFilteredData] = useState<any[]>([])
-  const [bgColor, setBgColor] = useState<any>('white')
-  const [textColor, setTextColor] = useState<any>('black')
+  const [bgColor, setBgColor] = useState<any>('#fff')
+  const [textColor, setTextColor] = useState<any>('#000')
   const [titleSize, setTitleSize] = useState<any>('23px')
   const [textSize, setTextSize] = useState<any>('16px')
 
@@ -37,6 +37,7 @@ const App = () => {
     width: window.innerWidth,
     height: window.innerHeight
   })
+  const [loading, setLoading] = useState<boolean>(false)
 
   const resize = () => {
     setDimension({
@@ -50,10 +51,6 @@ const App = () => {
       changeLanguage(language === 'tb' ? 'id' : 'en')
     }
   }, [changeLanguage, language])
-
-  // useEffect(() => {
-  //   console.log({ dimension })
-  // }, [dimension])
 
   useEffect(() => {
     window.addEventListener('resize', resize)
@@ -71,21 +68,23 @@ const App = () => {
 
 
   useEffect(() => {
-    console.log({ location })
     if (location?.pathname) {
       setPaths(location?.pathname?.split('/'))
       setChapter(location?.pathname?.split('/')[3])
       setSelectedChapter(location?.pathname?.split('/')[3])
     }
+    setLoading(true)
     fetch(
       `${process.env.REACT_APP_BIBLE_PASSAGE_LIST}`
     )
       .then(response => response.json())
       .then(data => {
           setPassages(data.passage_list)
+          setLoading(false)
       })
       .catch(error => {
         console.log(error)
+        setLoading(false)
       })
   }, [location])
 
@@ -98,13 +97,10 @@ const App = () => {
 
   useEffect(() => {
     if (paths && paths.length > 0 && passages.length > 0) {
-      console.log({ passages })
-      console.log({ paths })
       const data = passages.filter((d: any) => {
         return paths[2]===d.abbreviation.replace(/\s/g, '')
       })
       setFilteredData(data)
-      console.log({data})
       setTotalChapter(data[0]?.total_chapter || 0)
     }
   }, [paths, passages])
@@ -125,7 +121,7 @@ const App = () => {
   useEffect(() => {
     const lang = localStorage.getItem('lang')
     if (filteredData && filteredData.length > 0) {
-      console.log('TESSSSSSSS',filteredData[0].abbreviation.replace(/\s/g, ''))
+      setLoading(true)
       fetch(
         `${process.env.REACT_APP_BIBLE_URL_V3 + `${filteredData[0].abbreviation.replace(/\s/g, '')}/${chapter}?ver=${lang}`}`
       )
@@ -136,9 +132,11 @@ const App = () => {
           (item:any) => item.content.toLowerCase().includes(keyword.toLowerCase())
         )
         setResultSearch(search)
+        setLoading(false)
       })
       .catch(error => {
         console.log(error)
+        setLoading(false)
       })
     }
   }, [chapter, filteredData, keyword, language])
@@ -182,8 +180,7 @@ const App = () => {
         <Route path='/bible/:passage/:chapter' 
           element={
             <Content 
-              data={filteredData} 
-              content={content} 
+              loading={loading}
               resultSearch={resultSearch}
               textColor={textColor}
               titleSize={titleSize}

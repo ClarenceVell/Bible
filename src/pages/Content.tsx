@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import BreadCrumb from '../components/BreadCrumb/BreadCrumb'
 import Loader from '../components/Loader/Loader'
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 export const Load = styled.div`
   display: flex;
@@ -11,19 +12,20 @@ export const Load = styled.div`
 `
 
 interface ContentProps {
-    data: any[]
-    content: any
     textColor: any
     titleSize: any
     textSize: any
     resultSearch: any
+    loading: boolean
 }
 
-const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, textSize, resultSearch}) => {
+const Content : React.FC<ContentProps> = ({textColor, titleSize, textSize, resultSearch, loading}) => {
   const [verse, setVerse] = useState<any>()
-  console.log('DATA', data)
-  console.log('CONTENT', content)
-  // // console.log(content.verses)
+  // const { speak } = useSpeechSynthesis();
+  // let voiceOptions = window.speechSynthesis.getVoices();
+
+  // let msg = new SpeechSynthesisUtterance()
+
   useEffect(() => {
     if(resultSearch?.length > 0 ){
       if(resultSearch[0]?.type === "title"){
@@ -35,7 +37,10 @@ const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, 
     }
   }, [resultSearch])
 
-  if(!resultSearch) return <Load> <Loader /> </Load> 
+
+  if(loading) return <Load> <Loader /> </Load> 
+
+  
   
   return (
     <div style={{padding: '80px 20px 10px 30px'}}>
@@ -43,7 +48,17 @@ const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, 
         <p style={{fontSize: titleSize, fontWeight: 'bold', textAlign: 'center', margin: '10px 0'}}>{verse?.content}</p>
         <ol>
           {resultSearch?.map((x:any, idx:number) => (
-            <div style={{padding: '0 20px'}} key={idx}>
+            <div 
+            // onClick={() => speak({ text: x.content,
+              // voices: { 
+              //   default: true,
+              //   lang: "id-ID",
+              //   localService: true,
+              //   name:"Microsoft Gadis Online (Natural) - Indonesian (Indonesia)",
+              //   voiceURI: "Microsoft Gadis Online (Natural) - Indonesian (Indonesia)"
+              //  } 
+              // })}
+                style={{padding: '0 20px'}} key={idx}>
               <li style={{fontSize: textSize, marginBottom: '6px'}}>{x.content}</li>
             </div>
           ))}
@@ -53,3 +68,4 @@ const Content : React.FC<ContentProps> = ({data, content, textColor, titleSize, 
 }
 
 export default Content
+
