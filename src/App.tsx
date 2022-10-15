@@ -185,6 +185,7 @@ const App = () => {
               textColor={textColor}
               titleSize={titleSize}
               textSize={textSize}
+              language={language}
             />
           } 
         />
